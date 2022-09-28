@@ -55,7 +55,7 @@ const Home: NextPage = () => {
 	};
 	const send = async () => {
 		if (!contract) return;
-		const response = await contract.sendA();
+		const response = await contract.setA(1);
 		console.log({ sendA: response });
 	};
 
