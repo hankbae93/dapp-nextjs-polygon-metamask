@@ -26,11 +26,14 @@ const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
 		let tempSigner = tempProvider.getSigner();
 		setSigner(tempSigner);
+	};
 
-		let tempContract = new ethers.Contract(
+	const createContract = () => {
+		if (!signer) return;
+		const tempContract = new ethers.Contract(
 			CONTRACT_ADDRESS,
 			CONTRACT_ABI,
-			tempSigner
+			signer
 		);
 
 		setWeb3((prev) => ({
@@ -42,6 +45,10 @@ const TransactionProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		updateEthers();
 	}, []);
+
+	useEffect(() => {
+		createContract();
+	}, [provider]);
 
 	return <>{children}</>;
 };
