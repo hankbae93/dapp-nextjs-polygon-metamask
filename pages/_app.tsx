@@ -1,12 +1,16 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import Web3 from "web3";
-import { useEffect } from "react";
-
-declare let window: any;
+import { RecoilRoot } from "recoil";
+import TransactionProvider from "../components/TransactionProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
-	return <Component {...pageProps} />;
+	return (
+		<RecoilRoot>
+			<TransactionProvider>
+				<Component {...pageProps} />
+			</TransactionProvider>
+		</RecoilRoot>
+	);
 }
 
 export default MyApp;
