@@ -1,72 +1,193 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { Contract, ethers } from "ethers";
+import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import Hank from "../contracts/Hank.json";
+
+declare let window: any;
 
 const Home: NextPage = () => {
+  const [account, setAccount] = useState<string | undefined>();
+  const [contract, setContract] = useState<Contract>();
+  const connectWallet = async () => {
+    try {
+      if (!window.ethereum) return alert("Please install MetaMask.");
+
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log({ accounts });
+      setAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object");
+    }
+  };
+
+  const loadBlockchainData = async () => {
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = provider.getSigner();
+
+    // if (!signer) return alert("DD");
+
+    // const contract = new ethers.Contract(
+    // "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782",
+    // [
+    //   {
+    //     inputs: [],
+    //     name: "InvalidA",
+    //     type: "error",
+    //   },
+    //   {
+    //     anonymous: false,
+    //     inputs: [
+    //       {
+    //         indexed: false,
+    //         internalType: "uint256",
+    //         name: "a",
+    //         type: "uint256",
+    //       },
+    //     ],
+    //     name: "ChangeA",
+    //     type: "event",
+    //   },
+    //   {
+    //     inputs: [
+    //       {
+    //         internalType: "uint256",
+    //         name: "_a",
+    //         type: "uint256",
+    //       },
+    //     ],
+    //     name: "setA",
+    //     outputs: [],
+    //     stateMutability: "nonpayable",
+    //     type: "function",
+    //   },
+    //   {
+    //     inputs: [],
+    //     name: "test1",
+    //     outputs: [
+    //       {
+    //         internalType: "uint256",
+    //         name: "",
+    //         type: "uint256",
+    //       },
+    //     ],
+    //     stateMutability: "view",
+    //     type: "function",
+    //   },
+    // ],
+    //   provider
+    // );
+    // console.log({ contract });
+    // setContract(contract);
+
+    const myContractInstance = new window.web3.eth.Contract(
+      [
+        {
+          inputs: [],
+          name: "InvalidA",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "a",
+              type: "uint256",
+            },
+          ],
+          name: "ChangeA",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_a",
+              type: "uint256",
+            },
+          ],
+          name: "setA",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "test1",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782"
+    );
+
+    try {
+      console.time("call test");
+      const b = await myContractInstance.methods.test1().call({
+        from: account,
+      });
+      console.log(b);
+      console.timeEnd("call test");
+
+      console.time("send test");
+      const a = await myContractInstance.methods.setA(12).send({
+        from: account,
+      });
+      console.log({ a });
+      console.timeEnd("send test");
+      // const a = await contract.connect(signer).setA(100);
+      // const a = await contract.connect(signer).setA("105", { gas: 2100000 });
+      // const receipt = await a.wait();
+      // console.log(receipt);
+      // console.log({ a });
+      // const b = await contract.test1();
+      // console.log({ b });
+    } catch (err) {
+      console.error(err);
+    }
+    // if (networkData) {
+    //   var tempContract = new web3.eth.Contract(
+    //     Decentragram.abi,
+    //     networkData.address
+    //   );
+    //   setContract(tempContract);
+    //   var count = await tempContract.methods.imageCount().call();
+    //   setImageCount(count);
+    //   var tempImageList = [];
+    //   for (var i = 1; i <= count; i++) {
+    //     const image = await tempContract.methods.images(i).call();
+    //     tempImageList.push(image);
+    //   }
+    //   tempImageList.reverse();
+    //   setImages(tempImageList);
+    // } else {
+    //   window.alert("TestNet not found");
+    // }
+    // setLoading(false);
+  };
+
+  useEffect(() => {
+    // loadBlockchainData();
+  }, []);
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated by create next app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+    <div>
+      <button onClick={connectWallet}>로그인</button>
+      <button onClick={loadBlockchainData}>aa</button>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

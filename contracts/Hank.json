@@ -1,0 +1,56 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Hank",
+  "sourceName": "contracts/Hank.sol",
+  "address": "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "InvalidA",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "a",
+          "type": "uint256"
+        }
+      ],
+      "name": "ChangeA",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_a",
+          "type": "uint256"
+        }
+      ],
+      "name": "setA",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "test1",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50610107806100206000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c80636b59084d146037578063ee919d5014604c575b600080fd5b60005460405190815260200160405180910390f35b605b605736600460b9565b605d565b005b6064811115607e5760405163ba1afe8b60e01b815260040160405180910390fd5b60008190556040518181527f93a67bed49a69cf3f982434d015a238458daa1a68a0668907a8df754f3b4dddd9060200160405180910390a150565b60006020828403121560ca57600080fd5b503591905056fea264697066735822122057eb9511046e7b052e6645bce7ce0d3d237aa6b9539e7cdca50e2a1280ef61dd64736f6c63430008090033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c80636b59084d146037578063ee919d5014604c575b600080fd5b60005460405190815260200160405180910390f35b605b605736600460b9565b605d565b005b6064811115607e5760405163ba1afe8b60e01b815260040160405180910390fd5b60008190556040518181527f93a67bed49a69cf3f982434d015a238458daa1a68a0668907a8df754f3b4dddd9060200160405180910390a150565b60006020828403121560ca57600080fd5b503591905056fea264697066735822122057eb9511046e7b052e6645bce7ce0d3d237aa6b9539e7cdca50e2a1280ef61dd64736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
