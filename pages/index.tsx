@@ -2,6 +2,7 @@ import { Contract, ethers } from "ethers";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import Hank from "../contracts/Hank.json";
+import {testABI} from "../contracts/abi";
 
 declare let window: any;
 
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      console.log({ accounts });
+      console.log('login address:', accounts[0]);
       setAccount(accounts[0]);
     } catch (error) {
       console.log(error);
@@ -25,135 +26,91 @@ const Home: NextPage = () => {
   };
 
   const loadBlockchainData = async () => {
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // const signer = provider.getSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
 
-    // if (!signer) return alert("DD");
+    if (!signer) return alert("DD");
 
-    // const contract = new ethers.Contract(
-    // "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782",
-    // [
-    //   {
-    //     inputs: [],
-    //     name: "InvalidA",
-    //     type: "error",
-    //   },
-    //   {
-    //     anonymous: false,
-    //     inputs: [
-    //       {
-    //         indexed: false,
-    //         internalType: "uint256",
-    //         name: "a",
-    //         type: "uint256",
-    //       },
-    //     ],
-    //     name: "ChangeA",
-    //     type: "event",
-    //   },
-    //   {
-    //     inputs: [
-    //       {
-    //         internalType: "uint256",
-    //         name: "_a",
-    //         type: "uint256",
-    //       },
-    //     ],
-    //     name: "setA",
-    //     outputs: [],
-    //     stateMutability: "nonpayable",
-    //     type: "function",
-    //   },
-    //   {
-    //     inputs: [],
-    //     name: "test1",
-    //     outputs: [
-    //       {
-    //         internalType: "uint256",
-    //         name: "",
-    //         type: "uint256",
-    //       },
-    //     ],
-    //     stateMutability: "view",
-    //     type: "function",
-    //   },
-    // ],
-    //   provider
-    // );
-    // console.log({ contract });
-    // setContract(contract);
-
-    const myContractInstance = new window.web3.eth.Contract(
-      [
-        {
-          inputs: [],
-          name: "InvalidA",
-          type: "error",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "a",
-              type: "uint256",
-            },
-          ],
-          name: "ChangeA",
-          type: "event",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "_a",
-              type: "uint256",
-            },
-          ],
-          name: "setA",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "test1",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-      ],
-      "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782"
+    const contract = new ethers.Contract(
+    "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782",
+        testABI,
+      provider
     );
+    console.log({ contract });
+    setContract(contract);
+
+    // const myContractInstance = new window.web3.eth.Contract(
+    //   [
+    //     {
+    //       inputs: [],
+    //       name: "InvalidA",
+    //       type: "error",
+    //     },
+    //     {
+    //       anonymous: false,
+    //       inputs: [
+    //         {
+    //           indexed: false,
+    //           internalType: "uint256",
+    //           name: "a",
+    //           type: "uint256",
+    //         },
+    //       ],
+    //       name: "ChangeA",
+    //       type: "event",
+    //     },
+    //     {
+    //       inputs: [
+    //         {
+    //           internalType: "uint256",
+    //           name: "_a",
+    //           type: "uint256",
+    //         },
+    //       ],
+    //       name: "setA",
+    //       outputs: [],
+    //       stateMutability: "nonpayable",
+    //       type: "function",
+    //     },
+    //     {
+    //       inputs: [],
+    //       name: "test1",
+    //       outputs: [
+    //         {
+    //           internalType: "uint256",
+    //           name: "",
+    //           type: "uint256",
+    //         },
+    //       ],
+    //       stateMutability: "view",
+    //       type: "function",
+    //     },
+    //   ],
+    //   "0xd96fF3bA3EAC33A784622B65dB7f7aF614953782"
+    // );
+
 
     try {
-      console.time("call test");
-      const b = await myContractInstance.methods.test1().call({
-        from: account,
-      });
-      console.log(b);
-      console.timeEnd("call test");
-
-      console.time("send test");
-      const a = await myContractInstance.methods.setA(12).send({
-        from: account,
-      });
-      console.log({ a });
-      console.timeEnd("send test");
-      // const a = await contract.connect(signer).setA(100);
-      // const a = await contract.connect(signer).setA("105", { gas: 2100000 });
-      // const receipt = await a.wait();
-      // console.log(receipt);
+      // console.time("call test");
+      // const b = await myContractInstance.methods.test1().call({
+      //   from: account,
+      // });
+      // console.log(b);
+      // console.timeEnd("call test");
+      //
+      // console.time("send test");
+      // const a = await myContractInstance.methods.setA(12).send({
+      //   from: account,
+      // });
       // console.log({ a });
-      // const b = await contract.test1();
-      // console.log({ b });
+      // console.timeEnd("send test");
+
+      const a = await contract.connect(signer).setA(100);
+      const receipt = await a.wait();
+      console.log(receipt);
+      console.log(a);
+      const b = await contract.test1();
+      console.log(b);
     } catch (err) {
       console.error(err);
     }
