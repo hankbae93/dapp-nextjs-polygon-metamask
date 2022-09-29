@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
     "@metamask/providers": "^9.1.0",
+    "axios": "^0.27.2",
     "ethers": "^5.7.1",
     "lodash": "^4.17.21",
     "next": "12.3.1",

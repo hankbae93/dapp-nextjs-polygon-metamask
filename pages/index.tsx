@@ -4,12 +4,13 @@ import useAccount from "../hooks/useAccount";
 import { useRecoilValue } from "recoil";
 import { web3State } from "../atoms/contract";
 import { getReasonFromError } from "../lib/error-handler";
+import { useWeb3 } from "@3rdweb/hooks";
 
 const Home: NextPage = () => {
   const web3 = useRecoilValue(web3State);
   const [connButtonText, setConnButtonText] = useState("Connect Wallet");
   const { connectWallet } = useAccount();
-
+  const { address, chainId, connectWallet: connectWallet2 } = useWeb3();
   const { Contract, Signer } = web3;
 
   const call = async () => {
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
 
   const send = async () => {
     if (!Signer || !Contract) return;
-    const response = await Contract.setA(105).catch((error: Error) => {
+    const response = await Contract.setA(2).catch((error: Error) => {
       const ERROR = getReasonFromError(error, Contract.interface);
       console.log(ERROR);
     });
@@ -41,6 +42,10 @@ const Home: NextPage = () => {
         <button onClick={call}>call</button>
 
         <button onClick={send}>send</button>
+      </div>
+      <div>
+        <p>address: {address}</p>
+        <p>chainId: {chainId}</p>
       </div>
     </div>
   );
