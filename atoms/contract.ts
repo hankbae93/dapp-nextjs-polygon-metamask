@@ -1,9 +1,10 @@
-import { Contract, ethers } from "ethers";
+import { Contract } from "ethers";
 import { atom } from "recoil";
+import { Signer, Web3Provider } from "../types";
 
 interface Web3State {
-  Provider: ethers.providers.Web3Provider | null;
-  Signer: ethers.providers.JsonRpcSigner | null;
+  Provider: Web3Provider | null;
+  Signer: Signer | null;
   Contract: Contract | null;
   account: string;
 }

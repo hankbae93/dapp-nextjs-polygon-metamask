@@ -4,6 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { web3State } from "../atoms/contract";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../constants/contract";
+import { Signer, Web3Provider } from "../types";
 
 declare global {
   interface Window {
@@ -12,29 +13,30 @@ declare global {
 }
 
 const TransactionProvider = ({ children }: { children: ReactNode }) => {
-  const [provider, setProvider] =
-    useState<ethers.providers.Web3Provider | null>(null);
-  const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(
-    null
-  );
+  const [provider, setProvider] = useState<Web3Provider | null>(null);
+  const [signer, setSigner] = useState<Signer | null>(null);
   const [web3, setWeb3] = useRecoilState(web3State);
 
   const updateEthers = () => {
+    console.log("updateEthers called");
     if (!window.ethereum) return;
     let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(tempProvider);
 
-    let tempSigner = tempProvider.getSigner();
-    setSigner(tempSigner);
+    if (web3.Signer) {
+      console.log("if web3.Signer");
+      const signer = tempProvider.getSigner();
+      createContract(signer);
+    } else {
+      createContract(tempProvider);
+    }
   };
 
-  const createContract = async () => {
-    await provider?.send("eth_requestAccounts", []);
-    const signer = provider?.getSigner() as ethers.providers.JsonRpcSigner;
+  const createContract = async (providerOrSigner: Web3Provider | Signer) => {
     const tempContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       CONTRACT_ABI,
-      signer
+      providerOrSigner
     );
 
     setWeb3((prev) => ({
@@ -45,11 +47,11 @@ const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     updateEthers();
-  }, []);
+  }, [web3.Signer]);
 
   useEffect(() => {
-    createContract();
-  }, [provider]);
+    console.log({ web3 });
+  }, [web3]);
 
   return <>{children}</>;
 };
