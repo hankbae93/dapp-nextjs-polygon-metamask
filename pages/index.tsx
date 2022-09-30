@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRecoilValue } from "recoil";
 import { web3State } from "../atoms/contract";
 import { getReasonFromError } from "../lib/error-handler";
@@ -10,11 +10,11 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 
 const Home: NextPage = () => {
   const web3 = useRecoilValue(web3State);
-  const [connButtonText, setConnButtonText] = useState("Connect Wallet");
+
   const session = useSession();
   const { address, connector: activeConnector, isConnected } = useAccount();
 
-  const { connect, connectors, error, isLoading, pendingConnector } =
+  const { connectAsync, connectors, error, isLoading, pendingConnector } =
     useConnect({
       connector: new InjectedConnector(),
     });
@@ -24,17 +24,24 @@ const Home: NextPage = () => {
   const handleLogin = async () => {
     try {
       const callbackUrl = "/";
-      if (!isConnected) {
-        connect();
+      if (address) {
+        signIn("credentials", { address, callbackUrl });
+        return;
       }
+      const { account } = await connectAsync();
+      if (error) {
+        throw error;
+      }
+      signIn("credentials", { address: account, callbackUrl });
+    } catch (error) {
+      window.alert(error);
+    }
+  };
 
-      console.log({ activeConnector, address });
-
-      signIn("credentials", {
-        address,
-        callbackUrl,
-        redirect: error ? false : true,
-      });
+  const handleLogout = async () => {
+    try {
+      await signOut({ callbackUrl: "/" });
+      disconnect();
     } catch (error) {
       window.alert(error);
     }
@@ -67,7 +74,11 @@ const Home: NextPage = () => {
   return (
     <div>
       <div>
-        <button onClick={handleLogin}>{connButtonText || "로그인"}</button>
+        {session.status === "authenticated" ? (
+          <button onClick={handleLogout}>로그아웃</button>
+        ) : (
+          <button onClick={handleLogin}>로그인</button>
+        )}
       </div>
       <div>
         <button onClick={call}>call</button>
