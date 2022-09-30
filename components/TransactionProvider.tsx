@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const TransactionProvider = ({ children }: { children: ReactNode }) => {
+const TransactionProvider = ({ children }: { children?: ReactNode }) => {
   const [provider, setProvider] = useState<Web3Provider | null>(null);
   const [signer, setSigner] = useState<Signer | null>(null);
   const [web3, setWeb3] = useRecoilState(web3State);
@@ -53,7 +53,7 @@ const TransactionProvider = ({ children }: { children: ReactNode }) => {
     console.log({ web3 });
   }, [web3]);
 
-  return <>{children}</>;
+  return <></>;
 };
 
 export default TransactionProvider;

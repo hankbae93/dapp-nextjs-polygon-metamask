@@ -1,26 +1,28 @@
-import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
 import "regenerator-runtime/runtime";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 import TransactionProvider from "../components/TransactionProvider";
 
-const supportedChainsIds = [80001, 1, 4];
-const connectors = {
-  injected: {},
-};
+import { SessionProvider } from "next-auth/react";
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+import { Session } from "next-auth";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
+
+function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
-    <ThirdwebWeb3Provider
-      supportedChainsIds={supportedChainsIds}
-      connectors={connectors}
-    >
-      <RecoilRoot>
-        <TransactionProvider>
+    <WagmiConfig client={client}>
+      <SessionProvider session={pageProps.session}>
+        <RecoilRoot>
+          <TransactionProvider />
           <Component {...pageProps} />
-        </TransactionProvider>
-      </RecoilRoot>
-    </ThirdwebWeb3Provider>
+        </RecoilRoot>
+      </SessionProvider>
+    </WagmiConfig>
   );
 }
 

@@ -25,8 +25,6 @@ const useAccount = () => {
     }
   };
 
-  const connnectWallet2 = () => {};
-
   return {
     connectWallet,
   };

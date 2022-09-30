@@ -1,5 +1,6 @@
 import { Contract } from "ethers";
 import { atom } from "recoil";
+import { v1 } from "uuid";
 import { Signer, Web3Provider } from "../types";
 
 interface Web3State {
@@ -10,7 +11,7 @@ interface Web3State {
 }
 
 export const web3State = atom<Web3State>({
-  key: "web3",
+  key: `web3State/${v1()}`,
   default: {
     Provider: null,
     Signer: null,
