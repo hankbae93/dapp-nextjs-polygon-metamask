@@ -1,15 +1,29 @@
-import "../styles/globals.css";
+import "regenerator-runtime/runtime";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
-import TransactionProvider from "../components/TransactionProvider";
+import TransactionProvider from "src/provider/TransactionProvider";
 
-function MyApp({ Component, pageProps }: AppProps) {
+import { SessionProvider } from "next-auth/react";
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+import { Session } from "next-auth";
+
+const client = createClient({
+	autoConnect: true,
+	provider: getDefaultProvider(),
+});
+
+function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
 	return (
-		<RecoilRoot>
-			<TransactionProvider>
-				<Component {...pageProps} />
-			</TransactionProvider>
-		</RecoilRoot>
+		<WagmiConfig client={client}>
+			<SessionProvider session={pageProps.session}>
+				<RecoilRoot>
+					<TransactionProvider>
+						<Component {...pageProps} />
+					</TransactionProvider>
+				</RecoilRoot>
+			</SessionProvider>
+		</WagmiConfig>
 	);
 }
 
