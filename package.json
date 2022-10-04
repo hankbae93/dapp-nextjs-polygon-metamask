@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@3rdweb/hooks": "^1.9.2",
-    "@metamask/providers": "^9.1.0",
     "axios": "^0.27.2",
     "ethers": "^5.7.1",
     "lodash": "^4.17.21",
@@ -21,9 +19,7 @@
     "recoil": "^0.7.5",
     "siwe": "^1.1.6",
     "uuid": "^9.0.0",
-    "wagmi": "^0.6.7",
-    "web3": "^1.8.0",
-    "web3modal": "^1.9.9"
+    "wagmi": "^0.6.7"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.185",
