@@ -9,22 +9,22 @@ import { getDefaultProvider } from "ethers";
 import { Session } from "next-auth";
 
 const client = createClient({
-	autoConnect: true,
-	provider: getDefaultProvider(),
+  autoConnect: true,
+  provider: getDefaultProvider(),
 });
 
 function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
-	return (
-		<WagmiConfig client={client}>
-			<SessionProvider session={pageProps.session}>
-				<RecoilRoot>
-					<TransactionProvider>
-						<Component {...pageProps} />
-					</TransactionProvider>
-				</RecoilRoot>
-			</SessionProvider>
-		</WagmiConfig>
-	);
+  return (
+    <WagmiConfig client={client}>
+      <SessionProvider session={pageProps.session}>
+        <RecoilRoot>
+          <TransactionProvider>
+            <Component {...pageProps} />
+          </TransactionProvider>
+        </RecoilRoot>
+      </SessionProvider>
+    </WagmiConfig>
+  );
 }
 
 export default MyApp;

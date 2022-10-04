@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const UserInfoBox = () => {
-	const session = useSession();
+  const session = useSession();
 
-	return session ? <p>{session.data?.user.id}</p> : <p>로그인이 필요합니다.</p>;
+  return session ? <p>{session.data?.user.id}</p> : <p>로그인이 필요합니다.</p>;
 };
 
 export default UserInfoBox;
